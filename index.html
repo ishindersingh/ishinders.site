@@ -719,6 +719,7 @@
 @media (max-width: 480px) {
     .hero-content h1 {
         font-size: 1.8rem;
+        margin-top: 60px;
     }
 
     .hero-content p {
@@ -770,6 +771,31 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #0ea5e9;
         }
+        .iss-tracker {
+            margin-left: auto;
+            margin-right: 30px;
+            margin-top: 60px;
+            display: flex;
+            align-items: center;
+            font-size: 20px;
+            color: #ffffff;
+        }
+        
+        .iss-label {
+            margin-right: 8px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        #iss-coordinates {
+            font-family: 'Courier New', monospace;
+        }
+        
+        @media (max-width: 1024px) {
+            .iss-tracker {
+                font-size: medium;
+            }
+        }
     </style>
 </head>
 
@@ -794,12 +820,17 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
-            <h1>From Idea to Innovation</h1>
+            <h1>From Idea to Innovation </h1>
             <p>Welcome to Ishinders Research Lab and Automation - where innovative technology transforms into practical solutions. Explore our cutting-edge projects, read insightful research articles, and find the perfect components for your next creation in our specialized store.</p>
             <div>
                 <a href="#store" class="cta-button">Shop Components</a>
                 <a href="#articles" class="cta-button primary">Researches & Articles</a>
-        </div>
+            <div class="iss-tracker">
+                <a href="satalight_data.html" style="text-decoration: underline; color: #ffffff; display: flex; align-items: center;">
+                    <span class="iss-label">View Live Satellite Data</span>
+                    <span id="iss-coordinates">Loading...</span>
+                </a>
+            </div>
     </section>
 
     <!-- Projects Section -->
@@ -1005,6 +1036,24 @@
         document.querySelectorAll('.project-card').forEach(card => {
             observer.observe(card);
         });
+        function getISSLocation() {
+            fetch('https://api.wheretheiss.at/v1/satellites/25544')
+                .then(response => response.json())
+                .then(data => {
+                    const lat = data.latitude.toFixed(4);
+                    const lon = data.longitude.toFixed(4);
+                    document.getElementById('iss-coordinates').innerHTML = 
+                        `Lat: ${lat}° Lon: ${lon}°`;
+                })
+                .catch(error => {
+                    document.getElementById('iss-coordinates').innerHTML = 'Unavailable';
+                    console.error('Error fetching ISS data:', error);
+                });
+        }
+        
+        // Update ISS location every 5 seconds
+        getISSLocation();
+        setInterval(getISSLocation, 5000);
     </script>
 </body>
 
