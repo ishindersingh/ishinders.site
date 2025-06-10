@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARM vs Intel: RISC vs CISC Architecture and the Future of Computing | IRA</title>
+    <meta name="description" content="Comprehensive comparison of ARM and Intel processors, exploring RISC vs CISC architectures, System-on-Chip designs, GPIO capabilities, and their impact on modern computing devices.">
+    <meta name="keywords" content="ARM vs Intel, RISC vs CISC, processor architecture, System on Chip, SoC, GPIO, Apple M1, Snapdragon, embedded systems, mobile processors, x86 architecture, ARM Cortex">
+    <meta name="author" content="Ishinders Research Lab and Automation">
+    <meta property="og:title" content="ARM vs Intel: Understanding Modern Processor Architectures">
+    <meta property="og:description" content="Discover the fundamental differences between ARM and Intel processors, from RISC vs CISC architectures to System-on-Chip designs and GPIO capabilities.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.ishindersresearch.com/blog-site/articles/arm_and_intel.html">
+    <link rel="canonical" href="https://www.ishindersresearch.com/blog-site/articles/arm_and_intel.html">
+        <!-- Favicon -->
+        <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+        <link rel="apple-touch-icon" href="images/favicon.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', 'Helvetica Neue', sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 15px 50px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: 8px;
+            color: #fff;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #0ea5e9;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #0ea5e9;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 2px;
+            background: #fff;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Article Content */
+        .article-container {
+            padding: 120px 0 60px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 12px 25px;
+            background: transparent;
+            border: 2px solid #0ea5e9;
+            color: #0ea5e9;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            cursor: pointer;
+            margin-left: 20px;
+        }
+
+        .back-button:hover {
+            background: #0ea5e9;
+            color: #000;
+        }
+
+        .article-meta {
+            margin-bottom: 40px;
+            padding: 0 20px 20px;
+            border-bottom: 1px solid #333;
+        }
+
+        .article-meta h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .article-date {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        /* Article Content Styling */
+        .article-content {
+            color: #e6e6e6;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            padding: 0 20px;
+        }
+
+        .article-content h2 {
+            font-size: 1.8rem;
+            margin: 2.5rem 0 1rem;
+            color: #0ea5e9;
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5em;
+        }
+
+        .article-content h3 {
+            font-size: 1.4rem;
+            margin: 2rem 0 0.8rem;
+            color: #fff;
+        }
+
+        .article-content p {
+            margin: 1.2rem 0;
+        }
+
+        .article-content a {
+            color: #0ea5e9;
+            text-decoration: none;
+        }
+
+        .article-content a:hover {
+            text-decoration: underline;
+        }
+
+        .article-content code {
+            background-color: #1a1a1a;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .article-content pre {
+            background-color: #1a1a1a;
+            padding: 16px;
+            overflow: auto;
+            border-radius: 3px;
+            margin: 1rem 0;
+        }
+
+        .article-content pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        .article-content img {
+            max-width: 90%;
+            height: auto;
+            display: block;
+            margin: 2rem auto;
+            border-radius: 4px;
+            max-height: 350px;
+            object-fit: contain;
+            border: 1px solid #333;
+        }
+
+        .article-content blockquote {
+            color: #999;
+            border-left: 4px solid #0ea5e9;
+            padding-left: 20px;
+            margin: 1rem 0;
+            font-style: italic;
+        }
+
+        .article-content ul, 
+        .article-content ol {
+            padding-left: 1.5em;
+            margin: 1rem 0 1.5rem 1rem;
+        }
+
+        .article-content li {
+            margin: 0.5rem 0;
+        }
+
+        .emoji {
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+            color: #0ea5e9;
+        }
+
+        .key-point {
+            background-color: rgba(14, 165, 233, 0.1);
+            border-left: 4px solid #0ea5e9;
+            padding: 15px 20px;
+            margin: 1.5rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .key-point h3 {
+            margin-top: 0;
+            color: #0ea5e9;
+            font-size: 1.2rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .comparison-table th, 
+        .comparison-table td {
+            padding: 10px 15px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        .comparison-table th {
+            background-color: #111;
+            color: #0ea5e9;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .image-grid {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+            gap: 20px;
+        }
+
+        .image-item {
+            flex: 1;
+            max-width: 48%;
+            text-align: center;
+        }
+
+        .image-item img {
+            width: 100%;
+            max-height: 220px;
+            object-fit: cover;
+            margin: 0 auto 0.5rem;
+        }
+
+        .image-caption {
+            text-align: center;
+            color: #999;
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
+        /* Footer */
+        .footer {
+            background: #000;
+            text-align: center;
+            padding: 40px 50px;
+            border-top: 1px solid #333;
+            margin-top: 60px;
+        }
+
+        .footer p {
+            color: #666;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Enhanced Responsive Design */
+        @media (max-width: 768px) {
+            /* Prevent horizontal scroll */
+            body {
+                overflow-x: hidden;
+            }
+
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .logo {
+                font-size: 20px;
+                letter-spacing: 3px;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(0, 0, 0, 0.95);
+                flex-direction: column;
+                padding: 20px;
+                gap: 20px;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links a {
+                padding: 10px 0;
+                font-size: 16px;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .article-container {
+                padding: 100px 0 40px;
+            }
+
+            .article-meta {
+                padding: 0 15px 15px;
+            }
+
+            .article-meta h1 {
+                font-size: 1.8rem;
+            }
+
+            .article-content {
+                padding: 0 15px;
+                font-size: 1rem;
+            }
+
+            .article-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .article-content h3 {
+                font-size: 1.2rem;
+            }
+            
+            .image-grid {
+                flex-direction: column;
+            }
+            
+            .image-item {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <a href="../index.html" class="logo">IRA</a>
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="../index.html#about">About</a></li>
+            <li><a href="../index.html#projects">Projects</a></li>
+            <li><a href="../index.html#vision">Vision</a></li>
+            <li><a href="../index.html#store">Store</a></li>
+            <li><a href="../articals.html">Articles</a></li>
+            <li><a href="../index.html#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Article -->
+    <div class="article-container">
+        <a href="../articals.html" class="back-button">Back to Articles</a>
+        
+        <div class="article-meta">
+            <h1>ARM vs Intel: The Great Processor Architecture Battle</h1>
+            <div class="article-date">January 8, 2025</div>
+        </div>
+        
+        <div class="article-content">
+            <p>In the world of computing, two processor architectures dominate the landscape: <strong>ARM</strong> and <strong>Intel's x86</strong>. While Intel has long ruled desktop and server computing, ARM processors have revolutionized mobile devices and are now challenging Intel's dominance in laptops and even data centers. The fundamental difference lies in their architectural philosophy: <strong>RISC vs CISC</strong>.</p>
+
+            <div class="key-point">
+                <h3><span class="emoji">⚡</span> Key Architectural Difference</h3>
+                <p><strong>ARM</strong> uses RISC (Reduced Instruction Set Computing) - simple instructions executed quickly.</p>
+                <p><strong>Intel</strong> uses CISC (Complex Instruction Set Computing) - complex instructions that can do more per instruction.</p>
+            </div>
+            
+            <div class="image-grid">
+                <div class="image-item">
+                    <img src="https://images.unsplash.com/photo-1555617981-dac3880eac6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Intel processor">
+                    <div class="image-caption">Intel Core processor with CISC architecture</div>
+                </div>
+                <div class="image-item">
+                    <img src="https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="ARM-based processor">
+                    <div class="image-caption">ARM-based System-on-Chip (SoC)</div>
+                </div>
+            </div>
+
+            <h2><span class="emoji">🧠</span> RISC vs CISC: The Fundamental Philosophy</h2>
+            
+            <h3>RISC (Reduced Instruction Set Computing) - ARM's Approach</h3>
+            <p>ARM processors follow the RISC philosophy, which emphasizes:</p>
+            
+            <ul>
+                <li><strong>Simple Instructions:</strong> Each instruction performs one basic operation</li>
+                <li><strong>Fixed Instruction Length:</strong> All instructions are the same size (32-bit)</li>
+                <li><strong>Fast Execution:</strong> Simple instructions execute in one clock cycle</li>
+                <li><strong>Load/Store Architecture:</strong> Only load and store instructions access memory</li>
+                <li><strong>Pipelining Friendly:</strong> Simple instructions work well with pipeline optimization</li>
+            </ul>
+
+            <div class="key-point">
+                <h3><span class="emoji">🔧</span> RISC Example</h3>
+                <p>To add two numbers from memory in ARM:</p>
+                <pre><code>LDR R1, [address1]    ; Load first number
+LDR R2, [address2]    ; Load second number  
+ADD R3, R1, R2        ; Add them
+STR R3, [result]      ; Store result</code></pre>
+                <p>Four simple instructions, each doing one thing.</p>
+            </div>
+
+            <h3>CISC (Complex Instruction Set Computing) - Intel's Approach</h3>
+            <p>Intel x86 processors use CISC architecture, characterized by:</p>
+            
+            <ul>
+                <li><strong>Complex Instructions:</strong> Single instructions can perform multiple operations</li>
+                <li><strong>Variable Instruction Length:</strong> Instructions can be 1-15 bytes long</li>
+                <li><strong>Memory Operations:</strong> Can directly operate on memory without loading to registers</li>
+                <li><strong>Microcode:</strong> Complex instructions are broken down into micro-operations internally</li>
+                <li><strong>Backward Compatibility:</strong> Maintains compatibility with decades of software</li>
+            </ul>
+
+            <div class="key-point">
+                <h3><span class="emoji">🔧</span> CISC Example</h3>
+                <p>The same operation in x86 Intel:</p>
+                <pre><code>MOV EAX, [address1]
+ADD EAX, [address2]   ; Add directly from memory
+MOV [result], EAX</code></pre>
+                <p>Fewer instructions, but each instruction is more complex.</p>
+            </div>
+
+            <h2><span class="emoji">📱</span> System-on-Chip (SoC) Revolution</h2>
+            
+            <p>One of ARM's biggest advantages is its embrace of the System-on-Chip (SoC) design philosophy. While Intel traditionally focused on standalone processors, ARM processors are typically integrated into complete SoCs.</p>
+
+            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="System on Chip design">
+            <div class="image-caption">Modern SoC integrating CPU, GPU, memory, and peripherals</div>
+
+            <h3>What's Inside an ARM SoC?</h3>
+            <ul>
+                <li><strong>CPU Cores:</strong> Multiple ARM Cortex cores (efficiency and performance)</li>
+                <li><strong>GPU:</strong> Integrated graphics processing unit</li>
+                <li><strong>Memory Controller:</strong> Direct connection to RAM</li>
+                <li><strong>Neural Processing Unit (NPU):</strong> Dedicated AI/ML acceleration</li>
+                <li><strong>Image Signal Processor (ISP):</strong> Camera and video processing</li>
+                <li><strong>Digital Signal Processor (DSP):</strong> Audio and communication processing</li>
+                <li><strong>Connectivity:</strong> WiFi, Bluetooth, cellular modems</li>
+                <li><strong>Security:</strong> Hardware encryption and secure boot</li>
+            </ul>
+
+            <h3>Intel's SoC Evolution</h3>
+            <p>Intel has adapted by creating their own SoCs, but the approach differs:</p>
+            <ul>
+                <li><strong>Chipset Integration:</strong> Combining CPU with traditional chipset functions</li>
+                <li><strong>Larger Dies:</strong> More transistors due to CISC complexity</li>
+                <li><strong>Higher Power:</strong> Generally consume more power than ARM SoCs</li>
+                <li><strong>x86 Compatibility:</strong> Maintains full PC software compatibility</li>
+            </ul>
+
+            <h2><span class="emoji">🔌</span> GPIO: Why ARM Has It and Intel Doesn't</h2>
+            
+            <p>One of the most significant practical differences between ARM and Intel processors is <strong>GPIO (General Purpose Input/Output)</strong> availability.</p>
+
+            <div class="key-point">
+                <h3><span class="emoji">🎯</span> GPIO Explained</h3>
+                <p>GPIO pins are programmable digital I/O pins that can be configured as inputs or outputs to interface directly with external hardware like LEDs, sensors, motors, and other electronic components.</p>
+            </div>
+
+            <h3>Why ARM Processors Have GPIO</h3>
+            <ul>
+                <li><strong>Embedded Heritage:</strong> ARM originated in embedded systems where direct hardware control is essential</li>
+                <li><strong>SoC Integration:</strong> GPIO controllers are integrated into the SoC design</li>
+                <li><strong>Mobile Requirements:</strong> Smartphones need to control cameras, sensors, LEDs, haptic motors</li>
+                <li><strong>IoT Applications:</strong> Internet of Things devices require sensor interfacing</li>
+                <li><strong>Development Boards:</strong> Raspberry Pi, BeagleBone expose GPIO for maker projects</li>
+            </ul>
+
+            <h3>Why Intel Processors Don't Have Direct GPIO</h3>
+            <ul>
+                <li><strong>PC Architecture:</strong> x86 systems use standardized buses (USB, PCIe, SATA)</li>
+                <li><strong>Abstraction Layers:</strong> Hardware access goes through chipsets and device drivers</li>
+                <li><strong>Historical Design:</strong> Focused on computational performance, not direct I/O</li>
+                <li><strong>Power Management:</strong> GPIO would complicate power states in complex systems</li>
+                <li><strong>Market Focus:</strong> Targeted desktops/servers where GPIO isn't typically needed</li>
+            </ul>
+
+            <table class="comparison-table">
+                <tr>
+                    <th>Feature</th>
+                    <th>ARM SoC</th>
+                    <th>Intel x86</th>
+                </tr>
+                <tr>
+                    <td><strong>GPIO Pins</strong></td>
+                    <td>20-100+ pins available</td>
+                    <td>None (requires external chips)</td>
+                </tr>
+                <tr>
+                    <td><strong>Hardware Access</strong></td>
+                    <td>Direct register manipulation</td>
+                    <td>Through OS drivers and APIs</td>
+                </tr>
+                <tr>
+                    <td><strong>Real-time Control</strong></td>
+                    <td>Microsecond precision possible</td>
+                    <td>Limited by OS scheduling</td>
+                </tr>
+                <tr>
+                    <td><strong>External Hardware</strong></td>
+                    <td>Direct sensor/actuator connection</td>
+                    <td>USB/PCIe expansion required</td>
+                </tr>
+            </table>
+
+            <h2><span class="emoji">⚡</span> Performance and Power Comparison</h2>
+            
+            <div class="image-grid">
+                <div class="image-item">
+                    <img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="MacBook with M1 chip">
+                    <div class="image-caption">Apple MacBook with ARM-based M1 processor</div>
+                </div>
+                <div class="image-item">
+                    <img src="https://images.unsplash.com/photo-1593640495253-23196b27a87f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Gaming laptop with Intel">
+                    <div class="image-caption">Gaming laptop with Intel Core processor</div>
+                </div>
+            </div>
+
+            <h3>Power Efficiency: ARM's Strength</h3>
+            <p>ARM's RISC architecture and SoC integration provide significant power advantages:</p>
+            
+            <div class="key-point">
+                <h3><span class="emoji">🔋</span> Power Consumption Examples</h3>
+                <ul>
+                    <li><strong>Apple M1 Pro:</strong> 30W TDP (entire SoC)</li>
+                    <li><strong>Intel Core i7-12700H:</strong> 45W base + chipset power</li>
+                    <li><strong>Snapdragon 8 Gen 3:</strong> 3-8W (smartphone SoC)</li>
+                    <li><strong>ARM Cortex-M4:</strong> 0.001W (microcontroller)</li>
+                </ul>
+            </div>
+
+            <h3>Raw Performance: Intel's Traditional Domain</h3>
+            <p>Intel's CISC architecture can execute more complex operations per instruction:</p>
+            <ul>
+                <li><strong>Single-threaded Performance:</strong> High clock speeds (5+ GHz)</li>
+                <li><strong>x86 Optimization:</strong> Decades of compiler and software optimization</li>
+                <li><strong>Instruction Complexity:</strong> Advanced instructions for specific workloads</li>
+                <li><strong>Cache Hierarchy:</strong> Large, sophisticated cache systems</li>
+            </ul>
+
+            <h2><span class="emoji">🏆</span> Real-World Applications</h2>
+
+            <h3>ARM Dominance: Mobile and Embedded</h3>
+            <ul>
+                <li><strong>Smartphones:</strong> 99% of phones use ARM processors (Snapdragon, Apple A-series, Exynos)</li>
+                <li><strong>Tablets:</strong> iPad, Android tablets powered by ARM SoCs</li>
+                <li><strong>IoT Devices:</strong> Smart home devices, wearables, sensors</li>
+                <li><strong>Automotive:</strong> Infotainment systems, ADAS, autonomous driving computers</li>
+                <li><strong>Single-board Computers:</strong> Raspberry Pi, NVIDIA Jetson series</li>
+            </ul>
+
+            <h3>Intel's Stronghold: Desktop and Server</h3>
+            <ul>
+                <li><strong>Desktop PCs:</strong> Gaming rigs, workstations, office computers</li>
+                <li><strong>Laptops:</strong> Traditional Windows laptops (though ARM is gaining ground)</li>
+                <li><strong>Servers:</strong> Data centers, cloud computing (though ARM servers are growing)</li>
+                <li><strong>High-Performance Computing:</strong> Scientific computing, simulation</li>
+                <li><strong>Legacy Systems:</strong> Industrial computers, embedded x86 systems</li>
+            </ul>
+
+            <h2><span class="emoji">🚀</span> The Future: Architecture Convergence</h2>
+
+            <p>The boundaries between ARM and Intel are blurring as both architectures evolve:</p>
+
+            <h3>ARM's Desktop Push</h3>
+            <div class="key-point">
+                <h3><span class="emoji">💻</span> Apple Silicon Revolution</h3>
+                <p>Apple's transition from Intel to custom ARM processors (M1, M2, M3) proved ARM can compete in laptops and desktops, offering better performance per watt than Intel equivalents.</p>
+            </div>
+
+            <h3>Intel's Efficiency Focus</h3>
+            <ul>
+                <li><strong>Hybrid Architecture:</strong> Combining performance and efficiency cores (like ARM)</li>
+                <li><strong>Advanced Packaging:</strong> Chiplet designs similar to SoC concepts</li>
+                <li><strong>AI Acceleration:</strong> Dedicated neural processing units</li>
+                <li><strong>Lower Power SKUs:</strong> Ultra-low power processors for mobile devices</li>
+            </ul>
+
+            <h2><span class="emoji">🛠️</span> Development and Programming Differences</h2>
+
+            <h3>ARM Development</h3>
+            <p>Programming ARM processors, especially with GPIO:</p>
+            
+            <div class="key-point">
+                <h3><span class="emoji">🔧</span> Raspberry Pi GPIO Example</h3>
+                <pre><code>import RPi.GPIO as GPIO
+import time
+
+# Set up GPIO pin 18 as output
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(18, GPIO.OUT)
+
+# Control an LED
+while True:
+    GPIO.output(18, GPIO.HIGH)  # LED on
+    time.sleep(1)
+    GPIO.output(18, GPIO.LOW)   # LED off
+    time.sleep(1)</code></pre>
+            </div>
+
+            <h3>Intel Development</h3>
+            <p>Intel systems require external hardware for similar functionality:</p>
+            
+            <div class="key-point">
+                <h3><span class="emoji">🔌</span> Intel GPIO Alternative</h3>
+                <pre><code>import serial
+
+# Using USB-to-serial converter with microcontroller
+arduino = serial.Serial('/dev/ttyUSB0', 9600)
+
+# Send commands to external microcontroller
+while True:
+    arduino.write(b'LED_ON\n')
+    time.sleep(1)
+    arduino.write(b'LED_OFF\n')
+    time.sleep(1)</code></pre>
+            </div>
+
+            <h2><span class="emoji">📊</span> Market Impact and Economics</h2>
+
+            <table class="comparison-table">
+                <tr>
+                    <th>Market Segment</th>
+                    <th>ARM Market Share</th>
+                    <th>Intel Market Share</th>
+                    <th>Trend</th>
+                </tr>
+                <tr>
+                    <td><strong>Smartphones</strong></td>
+                    <td>~99%</td>
+                    <td>~1%</td>
+                    <td>ARM dominant</td>
+                </tr>
+                <tr>
+                    <td><strong>Tablets</strong></td>
+                    <td>~95%</td>
+                    <td>~5%</td>
+                    <td>ARM dominant</td>
+                </tr>
+                <tr>
+                    <td><strong>Laptops</strong></td>
+                    <td>~15%</td>
+                    <td>~85%</td>
+                    <td>ARM growing rapidly</td>
+                </tr>
+                <tr>
+                    <td><strong>Desktops</strong></td>
+                    <td>~5%</td>
+                    <td>~95%</td>
+                    <td>Intel holding strong</td>
+                </tr>
+                <tr>
+                    <td><strong>Servers</strong></td>
+                    <td>~10%</td>
+                    <td>~90%</td>
+                    <td>ARM gaining ground</td>
+                </tr>
+            </table>
+
+            <h2><span class="emoji">🔮</span> Looking Ahead: Next Generation Technologies</h2>
+
+            <h3>ARM's Future Innovations</h3>
+            <ul>
+                <li><strong>ARMv9 Architecture:</strong> Enhanced security, AI capabilities, and performance</li>
+                <li><strong>Scalable Vector Extensions (SVE):</strong> Advanced parallel processing</li>
+                <li><strong>Confidential Computing:</strong> Hardware-based security zones</li>
+                <li><strong>Automotive Grade:</strong> Specialized processors for autonomous vehicles</li>
+            </ul>
+
+            <h3>Intel's Response Strategy</h3>
+            <ul>
+                <li><strong>Intel 4 Process:</strong> Advanced manufacturing for better efficiency</li>
+                <li><strong>Xe Graphics:</strong> Integrated and discrete GPU competition</li>
+                <li><strong>Foveros Packaging:</strong> 3D stacking for SoC-like integration</li>
+                <li><strong>RISC-V Investment:</strong> Exploring alternative architectures</li>
+            </ul>
+
+            <div class="key-point">
+                <h3><span class="emoji">🎯</span> The Verdict</h3>
+                <p>ARM and Intel represent different philosophies: ARM prioritizes efficiency, integration, and direct hardware control, while Intel focuses on raw performance and software compatibility. The choice depends on your specific needs - embedded systems and mobile devices favor ARM, while high-performance computing and legacy software still prefer Intel. However, the gap is narrowing as both architectures adopt each other's strengths.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2025 Ishinders Research Lab and Automation (IRA). All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Hamburger menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+
+</html>
